@@ -1,0 +1,25 @@
+# Node modules and builds at root (if any)
+node_modules/
+dist/
+build/
+
+# Logs
+logs/
+*.log
+
+# Environment files
+.env
+.env.*
+
+# IDEs and editors
+.vscode/
+.idea/
+.DS_Store
+
+# Temp files
+.tmp/
+tmp/
+*.tmp
+
+# Node.js diagnostic reports
+report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
