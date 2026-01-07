@@ -1,7 +1,13 @@
-import { Injectable, ConflictException } from '@nestjs/common';
-import { PrismaService } from 'src/prisma/prisma.service';
+import {
+  Injectable,
+  ConflictException,
+  UnauthorizedException,
+} from '@nestjs/common';
+import { PrismaService } from '@/prisma/prisma.service';
 import { CreateUserDto } from './dto/create-user-dto';
 import { UserEntity } from './entities/user.entity';
+import { UseGuards } from '@nestjs/common';
+import { JwtAuthGuard } from '@/modules/auth/guards/jwt-auth.guard'
 import * as bcrypt from 'bcrypt';
 
 @Injectable()
@@ -39,11 +45,40 @@ export class UserService {
     return UserEntity.fromPrisma(user);
   }
 
+  async findByEmail(email: string): Promise<UserEntity | null> {
+    const user = await this.prisma.user.findUnique({
+      where: { email },
+    });
+    if (!user) return null;
+
+    return UserEntity.fromPrisma(user);
+  }
+
+  @UseGuards(JwtAuthGuard)
   async findAll(): Promise<UserEntity[]> {
     const users = await this.prisma.user.findMany();
 
-    return users.map(
-      (u) => UserEntity.fromPrisma(u),
-    );
+    return users.map((u) => UserEntity.fromPrisma(u));
+  }
+
+  async validateCredentials(
+    email: string,
+    password: string,
+  ): Promise<UserEntity> {
+    const user = await this.prisma.user.findUnique({
+      where: { email },
+    });
+
+    if (!user) {
+      throw new UnauthorizedException('Invalid Credentials');
+    }
+
+    const isValid = await bcrypt.compare(password, user.passwordHash);
+
+    if (!isValid) {
+      throw new UnauthorizedException('Invalid Credentials');
+    }
+
+    return UserEntity.fromPrisma(user);
   }
 }

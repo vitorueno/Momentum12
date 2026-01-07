@@ -12,10 +12,6 @@ export class UserEntity {
   }
 
   static fromPrisma(user: any): UserEntity {
-    return new UserEntity(
-      user.id,
-      user.email,
-      user.name ?? undefined
-    );
+    return new UserEntity(user.id, user.email, user.name ?? undefined);
   }
 }

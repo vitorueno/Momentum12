@@ -5,9 +5,9 @@ export class UserResponseDto {
 
   static fromEntity(entity: { id: string; email: string; name?: string }) {
     return {
-        id: entity.id,
-        email: entity.email,
-        name: entity.name,
+      id: entity.id,
+      email: entity.email,
+      name: entity.name,
     };
   }
 }
