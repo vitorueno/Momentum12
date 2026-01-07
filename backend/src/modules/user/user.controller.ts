@@ -5,7 +5,7 @@ import {
   Get,
   Param,
   NotFoundException,
-  UseGuards
+  UseGuards,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user-dto';
@@ -30,8 +30,8 @@ export class UserController {
     return users.map(UserResponseDto.fromEntity);
   }
 
-  @UseGuards(JwtAuthGuard)
   @Get('me')
+  @UseGuards(JwtAuthGuard)
   getMe(@CurrentUser() user: { userId: string; email: string }) {
     return {
       id: user.userId,
@@ -40,6 +40,7 @@ export class UserController {
   }
 
   @Get(':id')
+  @UseGuards(JwtAuthGuard)
   async findById(@Param('id') id: string): Promise<UserResponseDto> {
     const user = await this.userService.findById(id);
 

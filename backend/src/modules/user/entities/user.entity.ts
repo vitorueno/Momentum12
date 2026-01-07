@@ -1,5 +1,3 @@
-// src/modules/user/entities/user.entity.ts
-
 export class UserEntity {
   constructor(
     public readonly id: string,

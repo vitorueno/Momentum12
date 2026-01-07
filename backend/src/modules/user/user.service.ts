@@ -6,8 +6,6 @@ import {
 import { PrismaService } from '@/prisma/prisma.service';
 import { CreateUserDto } from './dto/create-user-dto';
 import { UserEntity } from './entities/user.entity';
-import { UseGuards } from '@nestjs/common';
-import { JwtAuthGuard } from '@/modules/auth/guards/jwt-auth.guard'
 import * as bcrypt from 'bcrypt';
 
 @Injectable()
@@ -54,7 +52,6 @@ export class UserService {
     return UserEntity.fromPrisma(user);
   }
 
-  @UseGuards(JwtAuthGuard)
   async findAll(): Promise<UserEntity[]> {
     const users = await this.prisma.user.findMany();
 
