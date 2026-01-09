@@ -12,6 +12,7 @@ import { CreateUserDto } from './dto/create-user-dto';
 import { UserResponseDto } from './dto/user-response.dto';
 import { JwtAuthGuard } from '@/modules/auth/guards/jwt-auth.guard';
 import { CurrentUser } from '@/modules/auth/decorators/current-user.decorator';
+import type { CurrentUserPayload } from '@/types';
 
 @Controller('user')
 export class UserController {
@@ -32,7 +33,7 @@ export class UserController {
 
   @Get('me')
   @UseGuards(JwtAuthGuard)
-  getMe(@CurrentUser() user: { userId: string; email: string }) {
+  getMe(@CurrentUser() user: CurrentUserPayload) {
     return {
       id: user.userId,
       email: user.email,
